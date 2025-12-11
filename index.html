@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7 Ay, 1 Yılbaşı, Sonsuz Biz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+            background: #0a0a1a;
+            color: #fff;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            z-index: 9999;
+            color: #fff;
+            font-size: 1em;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        .opening-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease;
+        }
+
+        .opening-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .title {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+            animation: fadeInDown 1s ease;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .countdown {
+            font-size: 5em;
+            font-weight: bold;
+            margin: 20px 0;
+            animation: pulse 1s infinite;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .countdown-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            min-width: 120px;
+        }
+
+        .countdown-number {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        .countdown-label {
+            font-size: 0.3em;
+            margin-top: 10px;
+            opacity: 0.9;
+            font-weight: normal;
+        }
+
+        .countdown-text {
+            font-size: 1.2em;
+            margin: 10px 0;
+            opacity: 0.9;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .message {
+            max-width: 600px;
+            text-align: center;
+            line-height: 1.8;
+            font-size: 1.1em;
+            margin: 30px 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 2s ease;
+        }
+
+        .enter-button {
+            margin-top: 30px;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a6f);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.4);
+            animation: bounce 2s infinite;
+        }
+
+        .enter-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255,107,107,0.6);
+        }
+
+        .question-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            padding: 20px;
+        }
+
+        .question-screen.active {
+            display: flex;
+        }
+
+        .question-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: fadeInDown 1s ease;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .question-subtitle {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            text-align: center;
+        }
+
+        .date-input {
+            padding: 15px 30px;
+            font-size: 1.5em;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 15px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+            width: 300px;
+            font-family: 'Georgia', serif;
+        }
+
+        .date-input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: rgba(255,255,255,0.6);
+            transform: scale(1.05);
+        }
+
+        .submit-button {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a6f);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.4);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255,107,107,0.6);
+        }
+
+        .error-message {
+            font-size: 3em;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .error-message.show {
+            opacity: 1;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        .main-content {
+            display: none;
+            min-height: 100vh;
+            padding: 50px 20px;
+        }
+
+        .main-content.active {
+            display: block;
+        }
+
+        .tree-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .tree-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .tree-intro {
+            max-width: 700px;
+            margin: 0 auto 50px;
+            line-height: 1.8;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .tree-container {
+            position: relative;
+            margin: 50px auto;
+            min-height: 600px;
+        }
+
+        .tree-base {
+            font-size: 15em;
+            color: #2d5016;
+            text-shadow: 0 0 30px rgba(45,80,22,0.5);
+            animation: treeGrow 2s ease;
+        }
+
+        .tree-ornaments {
+            position: absolute;
+            inset: 0;
+        }
+
+        .ornament {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            transition: all 0.3s ease;
+            animation: swing 3s ease-in-out infinite;
+        }
+
+        .ornament:hover {
+            transform: scale(1.3) rotate(360deg);
+        }
+
+        
+.tree-ornaments .ornament:nth-child(1) { 
+    top: -5%;      /* 15% → 20% yapıldı, biraz aşağı indi */
+    left: 48%; 
+    background: linear-gradient(45deg, #ff6b6b, #ee5a6f); 
+    animation-delay: 0s; 
+}
+
+.tree-ornaments .ornament:nth-child(5) { 
+    top: 58%;      /* 38% → 58% yapıldı, daha aşağı indi */
+    left: 48%; 
+    background: linear-gradient(45deg, #4ecdc4, #44a3a0); 
+    animation-delay: 2s; 
+}
+
+
+        .tree-ornaments .ornament:nth-child(2) { top: 25%; left: 38%; background: linear-gradient(45deg, #4ecdc4, #44a3a0); animation-delay: 0.5s; }
+        .tree-ornaments .ornament:nth-child(3) { top: 25%; left: 58%; background: linear-gradient(45deg, #ffd700, #ffed4e); animation-delay: 1s; }
+        .tree-ornaments .ornament:nth-child(4) { top: 38%; left: 35%; background: linear-gradient(45deg, #ff6b6b, #ee5a6f); animation-delay: 1.5s; }
+        
+        .tree-ornaments .ornament:nth-child(6) { top: 38%; left: 61%; background: linear-gradient(45deg, #ffd700, #ffed4e); animation-delay: 2.5s; }
+        .tree-ornaments .ornament:nth-child(7) { top: 52%; left: 41%; background: linear-gradient(45deg, #ff6b6b, #ee5a6f); animation-delay: 0.3s; }
+        .tree-ornaments .ornament:nth-child(8) { top: 52%; left: 55%; background: linear-gradient(45deg, #4ecdc4, #44a3a0); animation-delay: 0.8s; }
+
+        
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+            animation: slideUp 0.5s ease;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2em;
+            cursor: pointer;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .close-modal:hover {
+            transform: rotate(90deg) scale(1.2);
+        }
+
+        .wish-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .wish-image {
+            max-width: 100%;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .wish-text {
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .lights {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .light {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        @keyframes treeGrow {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px #ffd700; }
+            50% { text-shadow: 0 0 40px #ffd700, 0 0 60px #ffed4e; }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .title { font-size: 2em; }
+            .question-title { font-size: 1.8em; }
+            .countdown { 
+                font-size: 2.5em;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .countdown-unit {
+                min-width: 80px;
+                padding: 15px 10px;
+            }
+            .date-input {
+                width: 250px;
+                font-size: 1.2em;
+            }
+            .tree-title { font-size: 1.8em; }
+            .ornament { width: 50px; height: 50px; font-size: 1.5em; }
+        }
+
+
+/* Noel Baba Stil Ayarları */
+.santa {
+    position: absolute;
+    width: 200px;           /* 🔥 Boyut artırıldı */
+    height: auto;
+    top: 45%;               /* 🔥 Ağacın yüksekliğiyle hizalandı */
+    transform: translateY(-50%);
+    z-index: 1500;
+    filter: drop-shadow(0 0 15px rgba(255,255,255,0.4));
+    transition: transform 0.3s ease;
+}
+
+.santa-left {
+    left: -180px;           /* 🔥 Ağacın solunda */
+}
+
+.santa-right {
+    right: -180px;          /* 🔥 Ağacın sağında */
+}
+
+.santa:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+
+.special-photo {
+    position: absolute;
+    bottom: -120px;      /* Ağacın altına mesafe */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 180px;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(255,255,255,0.3);
+    animation: glowPhoto 3s infinite ease-in-out;
+    border: 4px solid rgba(255,255,255,0.2);
+}
+
+.special-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Hover büyüme efekti */
+.special-photo:hover {
+    transform: translateX(-50%) scale(1.08);
+    box-shadow: 0 0 30px rgba(255,255,255,0.5);
+}
+
+/* Yumuşak parıltı animasyonu */
+@keyframes glowPhoto {
+    0% { box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+    50% { box-shadow: 0 0 25px rgba(255,255,255,0.6); }
+    100% { box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+}
+
+
+/* Hafif yukarı aşağı sallansın */
+@keyframes santaFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+
+    </style>
+</head>
+<body>
+    <div id="snow-container"></div>
+    <div class="lights" id="lights"></div>
+
+    <div class="opening-screen" id="openingScreen">
+        <div class="title">🎄 7 Ay, 1 Yılbaşı, Sonsuz Biz 🎄</div>
+        <div class="countdown" id="countdown">
+            <div class="countdown-unit">
+                <div class="countdown-number" id="days">00</div>
+                <div class="countdown-label">GÜN</div>
+            </div>
+            <div class="countdown-unit">
+                <div class="countdown-number" id="hours">00</div>
+                <div class="countdown-label">SAAT</div>
+            </div>
+            <div class="countdown-unit">
+                <div class="countdown-number" id="minutes">00</div>
+                <div class="countdown-label">DAKİKA</div>
+            </div>
+            <div class="countdown-unit">
+                <div class="countdown-number" id="seconds">00</div>
+                <div class="countdown-label">SANİYE</div>
+            </div>
+        </div>
+        <div class="countdown-text">Türkiye'de yeni yıla, seninle geçecek bir yıla geri sayım başladı. ✨</div>
+        <div class="message">
+            7 aydır hayatımı güzelleştiren insana…<br>
+            Bu yılbaşı ışıklarının, kar tanelerinin ve tüm dileklerin anlamı sen oldun.<br>
+            İlk yılbaşımız kutlu olsun aşkım, dilerim her yeni yıl, elini tuttuğum bir yıl olur.
+        </div>
+        <button class="enter-button" onclick="showQuestion()">💕 Kalbimin İçine Gir 💕</button>
+    </div>
+
+    <div class="question-screen" id="questionScreen">
+        <div class="question-title">💝 Tanışma Yıldönümümüzü Biliyor musun? 💝</div>
+        <div class="question-subtitle">Nokta ile Yaz<br>Örnek: 17.09.2025</div>
+        <input type="text" class="date-input" id="dateInput" placeholder="GG.AA.YYYY" maxlength="10">
+        <button class="submit-button" onclick="checkDate()">💖 Gönder 💖</button>
+        <div class="error-message" id="errorMessage">😢</div>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <button class="back-button" onclick="goBack()">⬅️ Başa Saralım</button>
+        
+        <div class="tree-section">
+            <h1 class="tree-title">🎄 Bizim Dilek Ağacımız 🎄</h1>
+            <p class="tree-intro">
+                Bu ağaç, bizim dilek ağacımız.<br>
+                Her dalında, seninle ilgili bir hayalim, bir gülüşün, bir anımız asılı.<br>
+                Dilekleri tek tek aç, çünkü her birinde sana dair bir parça var.
+            </p>
+            
+            <div class="tree-container">
+                <img src="noelbaba-left.png" class="santa santa-left" alt="Noel Baba Sol">
+                <img src="noelbaba-right.png" class="santa santa-right" alt="Noel Baba Sağ">
+
+                <div class="tree-base">🎄</div>
+                <div class="tree-ornaments">
+                    <!-- Ağacın altındaki özel fotoğraf -->
+<div class="special-photo" onclick="showSpecialPhoto()">
+    <img src="ozelfoto.jpg" alt="Özel Fotoğraf">
+</div>
+
+                    <div class="ornament" onclick="showWish(1)">🎁</div>
+                    <div class="ornament" onclick="showWish(2)">✨</div>
+                    <div class="ornament" onclick="showWish(3)">💝</div>
+                    <div class="ornament" onclick="showWish(4)">🎀</div>
+                    <div class="ornament" onclick="showWish(5)">📸</div>
+                    <div class="ornament" onclick="showWish(6)">🎪</div>
+                    <div class="ornament" onclick="showWish(7)">💫</div>
+                    <div class="ornament" onclick="showWish(8)">❤️</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            "Bu site, 7 aydır yüzümü güldüren birine, kalbimin bütün sabrıyla hazırlanmıştır."<br>
+            💝 Her satır: Sen. Her piksel: Sen. 💝
+        </div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">×</span>
+            <h2 class="wish-title" id="wishTitle"></h2>
+            <img id="wishImage" class="wish-image" src="" alt="Dilek görseli" style="display:none;">
+            <p class="wish-text" id="wishText"></p>
+        </div>
+    </div>
+
+    <script>
+        const wishes = {
+            1: {
+                title: "Dileğim 1 🗺️",
+                text: "Bu yıl, en az bir kez bilmediğimiz bir şehrin sokaklarında kaybolalım. Sadece biz, elimizde kahve, dilimizde şarkılar.",
+                img: "dilek1.jpg"
+            },
+            2: {
+                title: "Dileğim 2 🛋️",
+                text: "'Bugün hiçbir şey yapmayalım' günlerimiz olsun. Pijama, film, sarılma ve bol bol uyuya kalmalar.",
+                img: "dilek2.jpg"
+            },
+            3: {
+                title: "Dileğim 3 💞",
+                text: "Ne olursa olsun, kavga etsek bile aynı gün içinde barışalım. Çünkü sensiz geçen her dakika boşa.",
+                img: "dilek3.jpg"
+            },
+            4: {
+                title: "Dileğim 4 🤗",
+                text: "En az 100 kez sarılmak. Saymayı sen yaparsın, ben sarılmaya odaklanacağım.",
+                img: "dilek4.jpg"
+            },
+            5: {
+                title: "Dileğim 5 📷",
+                text: "Birlikte daha çok fotoğraf çekelim. Sadece poz verip gülmediklerimizden de olsun; yorgun, dağınık, kahkaha krizi hâllerimizden…",
+                img: "dilek5.jpg"
+            },
+            6: {
+                title: "Dileğim 6 🎠",
+                text: "En az bir 'çocuk gibi' günümüz olsun. Park, salıncak, abur cubur, gülme krizleri… Hiç büyümemişiz gibi.",
+                img: "dilek6.jpg"
+            },
+            7: {
+                title: "Dileğim 7 🫂",
+                text: "Sen yorulduğunda başını koyacağın bir omuz, üzüldüğünde tutunacağın bir el olmak. Hep.",
+                img: "dilek7.jpg"
+            },
+            8: {
+                title: "Son Dileğim 💖",
+                text: "Bu cümleyi gelecek yıl da, ondan sonraki yıl da, ondan sonraki yıl da yazıyor olmak: 'İyi ki varsın, iyi ki benimlesin.'",
+                img: "dilek8.jpg"
+            }
+        };
+
+        function getTurkeyNow() {
+            const now = new Date();
+            const turkeyString = now.toLocaleString("en-US", { timeZone: "Europe/Istanbul" });
+            return new Date(turkeyString);
+        }
+
+        function getNewYearTurkey() {
+            const turkeyNow = getTurkeyNow();
+            const targetYear = turkeyNow.getFullYear() + 1;
+            return new Date(`${targetYear}-01-01T00:00:00+03:00`);
+        }
+
+        const newYearTurkey = getNewYearTurkey();
+
+        function updateCountdown() {
+            const nowTR = getTurkeyNow().getTime();
+            const distance = newYearTurkey.getTime() - nowTR;
+
+            if (distance > 0) {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = String(days).padStart(2, '0');
+                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            } else {
+                document.getElementById('countdown').innerHTML = '<div class="countdown-number">🎉 Mutlu Yıllar! 🎉</div>';
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        function showQuestion() {
+            document.getElementById('openingScreen').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('questionScreen').classList.add('active');
+            }, 1000);
+        }
+
+        function checkDate() {
+            const input = document.getElementById('dateInput');
+            const value = input.value.trim();
+            const correctDate = '10.05.2025';
+
+            if (value === correctDate) {
+                document.getElementById('questionScreen').classList.remove('active');
+                setTimeout(() => {
+                    document.getElementById('mainContent').classList.add('active');
+                }, 500);
+            } else {
+                input.classList.add('shake');
+                document.getElementById('errorMessage').classList.add('show');
+                
+                setTimeout(() => {
+                    input.classList.remove('shake');
+                }, 500);
+                
+                setTimeout(() => {
+                    document.getElementById('errorMessage').classList.remove('show');
+                }, 2000);
+            }
+        }
+
+        document.getElementById('dateInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkDate();
+            }
+        });
+
+        function goBack() {
+            document.getElementById('mainContent').classList.remove('active');
+            document.getElementById('openingScreen').classList.remove('hidden');
+            document.getElementById('dateInput').value = '';
+            document.getElementById('errorMessage').classList.remove('show');
+        }
+
+        function showWish(num) {
+            const wish = wishes[num];
+            document.getElementById('wishTitle').textContent = wish.title;
+            document.getElementById('wishText').textContent = wish.text;
+            
+            const imgEl = document.getElementById('wishImage');
+            if (wish.img) {
+                imgEl.src = wish.img;
+                imgEl.style.display = 'block';
+            } else {
+                imgEl.style.display = 'none';
+            }
+
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function showSpecialPhoto() {
+    document.getElementById('wishTitle').textContent =" ❤️";
+    document.getElementById('wishText').textContent = "";
+    
+    const imgEl = document.getElementById('wishImage');
+    imgEl.src = "ozelfoto.jpg";   // kendi fotoğrafın
+    imgEl.style.display = "block";
+
+    document.getElementById('modal').classList.add('active');
+}
+
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.textContent = '❄';
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.animationDuration = Math.random() * 3 + 5 + 's';
+            snowflake.style.opacity = Math.random();
+            snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+            
+            document.getElementById('snow-container').appendChild(snowflake);
+            
+            setTimeout(() => {
+                snowflake.remove();
+            }, 8000);
+        }
+
+        setInterval(createSnowflake, 200);
+
+        function createLights() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#ffd700', '#ee5a6f', '#44a3a0', '#ffed4e'];
+            for (let i = 0; i < 50; i++) {
+                const light = document.createElement('div');
+                light.classList.add('light');
+                light.style.left = Math.random() * 100 + '%';
+                light.style.top = Math.random() * 100 + '%';
+                light.style.background = colors[Math.floor(Math.random() * colors.length)];
+                light.style.animationDelay = Math.random() * 2 + 's';
+                document.getElementById('lights').appendChild(light);
+            }
+        }
+
+        createLights();
+
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
+
