@@ -554,9 +554,27 @@
                 padding: 15px 10px;
             }
             .date-input {
-                width: 250px;
-                font-size: 1.2em;
-            }
+            /* --- İŞTE BU SATIRLAR İPHONE SORUNUNU ÇÖZER --- */
+            -webkit-appearance: none; /* Safari/iOS için varsayılan stili kapatır */
+            -moz-appearance: none;    /* Firefox için */
+            appearance: none;         /* Standart */
+            /* ----------------------------------------------- */
+
+            padding: 15px 30px;
+            font-size: 1.5em;
+            border: 3px solid rgba(255,255,255,0.5); /* Çerçeveyi biraz daha belirgin yaptım (0.3 -> 0.5) */
+            border-radius: 15px;
+            background: rgba(255,255,255,0.15); /* Arka planı biraz daha görünür yaptım */
+            color: white;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+            width: 300px;
+            font-family: 'Georgia', serif;
+            
+            /* Mobilde tıklayınca mavi kutu çıkmasını engeller */
+            outline: none; 
+        }
             .tree-title { font-size: 1.8em; }
             .ornament { width: 50px; height: 50px; font-size: 1.5em; }
         }
