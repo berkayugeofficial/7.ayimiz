@@ -52,38 +52,38 @@
 
 
         /* 💖 Kalp İçindeki İsimler */
-.heart-ornament {
-    position: relative;
-    width: 75px;
-    height: 75px;
-    font-size: 2.5em;
-    background: radial-gradient(circle, #ff5f9e, #fffdfdfd);
-    box-shadow: 
-        0 0 20px rgba(255, 95, 158, 0.8),
-        0 0 40px rgba(255, 8, 68, 0.6);
-    animation: heartBeat 1.5s infinite ease-in-out;
-    z-index: 10;
-}
+        .heart-ornament {
+            position: relative;
+            width: 75px;
+            height: 75px;
+            font-size: 2.5em;
+            background: radial-gradient(circle, #ff5f9e, #fffdfdfd);
+            box-shadow: 
+                0 0 20px rgba(255, 95, 158, 0.8),
+                0 0 40px rgba(255, 8, 68, 0.6);
+            animation: heartBeat 1.5s infinite ease-in-out;
+            z-index: 10;
+        }
 
-/* D & B yazısı */
-.heart-text {
-    position: absolute;
-    bottom: 10px;
-    font-size: 0.45em;
-    font-weight: bold;
-    color: white;
-    text-shadow: 0 0 10px rgba(255,255,255,0.9);
-    font-family: 'Georgia', serif;
-    pointer-events: none;
-    letter-spacing: 1px;
-}
+        /* D & B yazısı */
+        .heart-text {
+            position: absolute;
+            bottom: 10px;
+            font-size: 0.45em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.9);
+            font-family: 'Georgia', serif;
+            pointer-events: none;
+            letter-spacing: 1px;
+        }
 
-/* Hover'da daha romantik */
-.heart-ornament:hover .heart-text {
-    text-shadow:
-        0 0 15px #fff,
-        0 0 25px #ff9ecf;
-}
+        /* Hover'da daha romantik */
+        .heart-ornament:hover .heart-text {
+            text-shadow:
+                0 0 15px #fff,
+                0 0 25px #ff9ecf;
+        }
 
 
         .opening-screen.hidden {
@@ -343,21 +343,19 @@
             transform: scale(1.3) rotate(360deg);
         }
 
-        
-.tree-ornaments .ornament:nth-child(1) { 
-    top: -5%;      
-    left: 48%; 
-    background: linear-gradient(45deg, #ff6b6b, #ee5a6f); 
-    animation-delay: 0s; 
-}
+        .tree-ornaments .ornament:nth-child(1) { 
+            top: -5%;       
+            left: 48%; 
+            background: linear-gradient(45deg, #ff6b6b, #ee5a6f); 
+            animation-delay: 0s; 
+        }
 
-.tree-ornaments .ornament:nth-child(5) { 
-    top: 58%;      /* 38% → 58% yapıldı, daha aşağı indi */
-    left: 48%; 
-    background: linear-gradient(45deg, #4ecdc4, #44a3a0); 
-    animation-delay: 2s; 
-}
-
+        .tree-ornaments .ornament:nth-child(5) { 
+            top: 58%;      /* 38% → 58% yapıldı, daha aşağı indi */
+            left: 48%; 
+            background: linear-gradient(45deg, #4ecdc4, #44a3a0); 
+            animation-delay: 2s; 
+        }
 
         .tree-ornaments .ornament:nth-child(2) { top: 25%; left: 38%; background: linear-gradient(45deg, #4ecdc4, #44a3a0); animation-delay: 0.5s; }
         .tree-ornaments .ornament:nth-child(3) { top: 25%; left: 58%; background: linear-gradient(45deg, #ffd700, #ffed4e); animation-delay: 1s; }
@@ -366,8 +364,6 @@
         .tree-ornaments .ornament:nth-child(6) { top: 38%; left: 61%; background: linear-gradient(45deg, #ffd700, #ffed4e); animation-delay: 2.5s; }
         .tree-ornaments .ornament:nth-child(7) { top: 52%; left: 41%; background: linear-gradient(45deg, #ff6b6b, #ee5a6f); animation-delay: 0.3s; }
         .tree-ornaments .ornament:nth-child(8) { top: 52%; left: 55%; background: linear-gradient(45deg, #4ecdc4, #44a3a0); animation-delay: 0.8s; }
-
-        
 
         .modal {
             display: none;
@@ -662,8 +658,6 @@
     }
 }
 
-
-
     </style>
 </head>
 <body>
@@ -690,7 +684,7 @@
                 <div class="countdown-label">SANİYE</div>
             </div>
         </div>
-        <div class="countdown-text">Türkiye'de yeni yıla, seninle geçecek bir yıla geri sayım başladı. ✨</div>
+        <div class="countdown-text">Kalbimde'de yeni yıla, seninle geçecek bir yıla geri sayım başladı. ✨</div>
         <div class="message">
             7 aydır hayatımı güzelleştiren insana…<br>
             Bu yılbaşı ışıklarının, kar tanelerinin ve tüm dileklerin anlamı sen oldun.<br>
@@ -759,6 +753,8 @@
             <p class="wish-text" id="wishText"></p>
         </div>
     </div>
+
+    <audio id="bgMusic" src="jingle.mp3" loop></audio>
 
     <script>
         const wishes = {
@@ -856,6 +852,12 @@
                 document.getElementById('questionScreen').classList.remove('active');
                 setTimeout(() => {
                     document.getElementById('mainContent').classList.add('active');
+                    
+                    // 🎵 MÜZİĞİ BAŞLATAN KISIM 🎵
+                    var music = document.getElementById('bgMusic');
+                    music.volume = 0.5; // Ses seviyesi %50
+                    music.play();       // Oynat
+                    
                 }, 500);
             } else {
                 input.classList.add('shake');
@@ -882,6 +884,11 @@
             document.getElementById('openingScreen').classList.remove('hidden');
             document.getElementById('dateInput').value = '';
             document.getElementById('errorMessage').classList.remove('show');
+            
+            // 🎵 GERİ DÖNÜNCE MÜZİĞİ DURDUR VE BAŞA SAR 🎵
+            var music = document.getElementById('bgMusic');
+            music.pause();
+            music.currentTime = 0;
         }
 
         function showWish(num) {
@@ -957,5 +964,3 @@
     </script>
 </body>
 </html>
-
-
