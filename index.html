@@ -50,6 +50,42 @@
             transition: opacity 1s ease;
         }
 
+
+        /* 💖 Kalp İçindeki İsimler */
+.heart-ornament {
+    position: relative;
+    width: 75px;
+    height: 75px;
+    font-size: 2.5em;
+    background: radial-gradient(circle, #ff5f9e, #fffdfdfd);
+    box-shadow: 
+        0 0 20px rgba(255, 95, 158, 0.8),
+        0 0 40px rgba(255, 8, 68, 0.6);
+    animation: heartBeat 1.5s infinite ease-in-out;
+    z-index: 10;
+}
+
+/* D & B yazısı */
+.heart-text {
+    position: absolute;
+    bottom: 10px;
+    font-size: 0.45em;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 10px rgba(255,255,255,0.9);
+    font-family: 'Georgia', serif;
+    pointer-events: none;
+    letter-spacing: 1px;
+}
+
+/* Hover'da daha romantik */
+.heart-ornament:hover .heart-text {
+    text-shadow:
+        0 0 15px #fff,
+        0 0 25px #ff9ecf;
+}
+
+
         .opening-screen.hidden {
             opacity: 0;
             pointer-events: none;
@@ -309,7 +345,7 @@
 
         
 .tree-ornaments .ornament:nth-child(1) { 
-    top: -5%;      /* 15% → 20% yapıldı, biraz aşağı indi */
+    top: -5%;      
     left: 48%; 
     background: linear-gradient(45deg, #ff6b6b, #ee5a6f); 
     animation-delay: 0s; 
@@ -382,10 +418,17 @@
             color: #ffd700;
         }
 
-        .wish-image {
-            max-width: 100%;
+      .wish-image {
+            display: block;           /* Blok element yap (ortalamak için şart) */
+            margin: 0 auto 15px auto; /* Üst-Alt: 0, Sağ-Sol: Auto (ORTALAR), Alttan 15px boşluk */
+            
+            max-width: 100%;          /* Genişlik ekranı taşmasın */
+            
+            /* 🔥 KRİTİK AYAR BURASI: */
+            max-height: 40vh;         /* Resim boyu, ekranın %40'ını geçemesin */
+            
+            object-fit: contain;      /* Resmi kesmeden kutunun içine sığdır */
             border-radius: 15px;
-            margin-bottom: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
 
@@ -646,7 +689,7 @@
 
                 <div class="tree-base">🎄</div>
                 <div class="tree-ornaments">
-                    <!-- Ağacın altındaki özel fotoğraf -->
+                    
 <div class="special-photo" onclick="showSpecialPhoto()">
     <img src="ozelfoto.jpg" alt="Özel Fotoğraf">
 </div>
@@ -658,7 +701,11 @@
                     <div class="ornament" onclick="showWish(5)">📸</div>
                     <div class="ornament" onclick="showWish(6)">🎪</div>
                     <div class="ornament" onclick="showWish(7)">💫</div>
-                    <div class="ornament" onclick="showWish(8)">❤️</div>
+                    <div style="left: 48%; top: 0%;" class="ornament heart-ornament" onclick="showWish(8)">
+    ❤️
+    <span class="heart-text">D & B</span>
+</div>
+
                 </div>
             </div>
         </div>
@@ -823,7 +870,7 @@
     document.getElementById('wishText').textContent = "";
     
     const imgEl = document.getElementById('wishImage');
-    imgEl.src = "ozelfoto.jpg";   // kendi fotoğrafın
+    imgEl.src = "ozelfoto.jpg";   
     imgEl.style.display = "block";
 
     document.getElementById('modal').classList.add('active');
@@ -875,4 +922,5 @@
     </script>
 </body>
 </html>
+
 
